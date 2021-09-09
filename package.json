@@ -46,9 +46,9 @@
     "lint-staged": "^11.1.2",
     "prettier": "^2.3.2"
   },
-  "lint-staged": {
-    "*.js": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+   "lint-staged": {
+    "*.{js,jsx}": "eslint --cache --fix",
+    "*.{js,jsx,css,md,scss}": "prettier --write"
   },
   "homepage": "https://solarenergy990.github.io/goit-react-hw-07-phonebook"
 }
