@@ -27,7 +27,6 @@ const App = () =>
 
     return (
       <div>
-        <h1>Hello world</h1>
         <h2>Phonebook</h2>
         <ContactForm onSubmit={onHandleSubmit} />
 
