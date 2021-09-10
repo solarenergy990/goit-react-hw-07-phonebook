@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import ContactListItem from '../ContactsList/ContactListItem/ContactListItem';
 import s from './ContactsLIst.module.css';
 
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import Loader from 'react-loader-spinner';
+
 import { useSelector, useDispatch } from 'react-redux';
 
 import operations from '../../redux/app/operations';
@@ -11,6 +14,8 @@ import appSelectors from '../../redux/app/contacts-selectors';
 const ContactsList = () => {
   const contacts = useSelector(state => appSelectors.contactList(state));
   const filter = useSelector(state => appSelectors.contactFilter(state));
+  const isLoading = useSelector(state => appSelectors.contactLoading(state));
+  const error = useSelector(state => appSelectors.contactError(state));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,6 +29,18 @@ const ContactsList = () => {
   const visibleContacts = contacts.filter(contact => {
     return contact.name.toLowerCase().includes(filter.toLowerCase());
   });
+
+  if (isLoading) {
+    return (
+      <h1>
+        <Loader type="Rings" color="#00BFFF" height={42} width={42} />
+      </h1>
+    );
+  }
+
+  if (error) {
+    <h1>oops, something went wrong...</h1>;
+  }
 
   return (
     <div className={s.contacts}>
