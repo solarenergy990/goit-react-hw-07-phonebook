@@ -12,7 +12,6 @@ const ContactForm = () => {
 
   const dispatch = useDispatch();
   const contacts = useSelector(state => {
-    // console.log('contacts form', state.appState.contacts);
     return state.appState.contacts.items;
   });
 
@@ -29,11 +28,10 @@ const ContactForm = () => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    // console.log('contact form', contacts);
-    // onSubmit({ name, number });
+
     const id = shortid();
-    const newContact = { name, number, id };
-    // const inDataBase = contacts.find;
+    const newContact = { id, name, number };
+
     const checkedContactNames = contacts.map(contact => {
       return contact.name.toLowerCase();
     });
