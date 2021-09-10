@@ -1,5 +1,5 @@
 // import actionTypes from './types';
-import initialContacts from '../../contacts.json';
+
 import { combineReducers } from 'redux';
 import { createReducer } from '@reduxjs/toolkit';
 import appActions from './actions';
@@ -9,26 +9,6 @@ const initialState = {
   isLoading: false,
   error: '',
 };
-
-// const contacts = createReducer(initialState, {
-//   [actions.addContact]: (state, { payload }) => {
-//     console.log('payload', payload);
-//     console.log('state', state);
-
-//     const checkedContactNames = state.map(contact => {
-//       return contact.name.toLowerCase();
-//     });
-//     if (!checkedContactNames.includes(payload.name.toLowerCase())) {
-//       return [...state, payload];
-//     } else {
-//       alert(`${payload.name} is already in contacts`);
-//       return state;
-//     }
-//   },
-//   [actions.deleteContact]: (state, { payload }) => {
-//     return state.filter(contact => contact.id !== payload.id);
-//   },
-// });
 
 const contacts = createReducer(initialState, {
   [appActions.addContact]: (state, { payload }) => {
