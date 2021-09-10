@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+
+import shortid from 'shortid';
+import { useSelector, useDispatch } from 'react-redux';
+import operations from '../../redux/app/operations';
 
 import s from './ContactForm.module.css';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
+  const contacts = useSelector(state => {
+    // console.log('contacts form', state.appState.contacts);
+    return state.appState.contacts.items;
+  });
 
   const handleChange = evt => {
     const { value } = evt.target;
@@ -20,9 +29,21 @@ const ContactForm = ({ onSubmit }) => {
 
   const handleSubmit = evt => {
     evt.preventDefault();
+    // console.log('contact form', contacts);
+    // onSubmit({ name, number });
+    const id = shortid();
+    const newContact = { name, number, id };
+    // const inDataBase = contacts.find;
+    const checkedContactNames = contacts.map(contact => {
+      return contact.name.toLowerCase();
+    });
 
-    onSubmit({ name, number });
+    if (checkedContactNames.includes(newContact.name.toLowerCase())) {
+      reset();
+      return alert(`${newContact.name} is already in contacts`);
+    }
 
+    dispatch(operations.postContactOperation(newContact));
     reset();
   };
 
@@ -54,7 +75,7 @@ const ContactForm = ({ onSubmit }) => {
               type="tel"
               name="number"
               pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              title="Номер телефона должен состоять цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
+              title="Номер телефона должен состоять из цифр и может содержать пробелы, тире, круглые скобки и может начинаться с +"
               required
               onChange={handleChange}
               value={number}
@@ -68,10 +89,6 @@ const ContactForm = ({ onSubmit }) => {
       </form>
     </div>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ContactForm;

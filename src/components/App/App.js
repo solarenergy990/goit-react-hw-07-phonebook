@@ -4,65 +4,55 @@ import ContactsList from '../ContactsList/ContactsList';
 import Filter from '../Filter/Filter';
 
 // import { connect } from 'react-redux'
-import { useSelector, useDispatch } from 'react-redux';
-import appActions from '../../redux/app/actions';
+// import { useSelector, useDispatch } from 'react-redux';
+// import appActions from '../../redux/app/actions';
+// import operations from '../../redux/app/operations';
 
-const App = () =>
-  // {
-  //   // contacts,
-  //   // filter,
-  //   // onHandleSubmit,
-  //   // onDeleteContact,
-  //   // onChangeFilter,
-  // },
-  {
-    const contacts = useSelector(state => state.appState.contacts);
-    const filter = useSelector(state => state.appState.filter);
-    const dispatch = useDispatch();
+const App = () => {
+  // const contacts = useSelector(state => {
+  //   // console.log('contacts', state.appState.contacts);
+  //   return state.appState.contacts.items;
+  // });
+  // const filter = useSelector(state => {
+  //   // console.log('filter', state.appState.filter);
+  //   return state.appState.filter;
+  // });
+  // const dispatch = useDispatch();
 
-    const onHandleSubmit = contact => dispatch(appActions.addContact(contact));
-    const onDeleteContact = contactId =>
-      dispatch(appActions.deleteContact(contactId));
-    const onChangeFilter = value => dispatch(appActions.setFilter(value));
+  // const onHandleSubmit = contact =>
+  //   dispatch(operations.postContactOperation(contact));
+  // const onDeleteContact = contactId =>
+  //   dispatch(operations.deleteContactOperation(contactId));
+  // const onChangeFilter = value => dispatch(appActions.setFilter(value));
 
-    return (
-      <div>
-        <h2>Phonebook</h2>
-        <ContactForm onSubmit={onHandleSubmit} />
+  // useEffect(() => {
+  //   dispatch(operations.getContactOperation());
+  // }, [dispatch]);
 
-        <h2>Contacts</h2>
-        <Filter value={filter} onChange={onChangeFilter} />
-        <ContactsList
-          contacts={getVisibleContacts(contacts, filter)}
-          onContactDelete={onDeleteContact}
-        />
-      </div>
-    );
-  };
+  // const getVisibleContacts = (contacts, filter) => {
+  //   console.log('get visible', contacts);
+  //   if (!filter) {
+  //     return contacts;
+  //   }
 
-const getVisibleContacts = (contacts, filter) => {
-  if (!filter) {
-    return contacts;
-  }
+  //   const normalizedFilter = filter.toLowerCase();
 
-  const normalizedFilter = filter.toLowerCase();
+  //   return contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(normalizedFilter),
+  //   );
+  // };
 
-  return contacts.filter(contact =>
-    contact.name.toLowerCase().includes(normalizedFilter),
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <ContactForm />
+
+      <h2>Contacts</h2>
+      <Filter />
+
+      <ContactsList />
+    </div>
   );
 };
-
-// const mapStateToProps = state => {
-//   return {
-//     contacts: state.appState.contacts,
-//     filter: state.appState.filter,
-//   };
-// };
-
-// const mapDispatchToProps = dispatch => ({
-//   onHandleSubmit: value => dispatch(appActions.addContact(value)),
-//   onDeleteContact: value => dispatch(appActions.deleteContact(value)),
-//   onChangeFilter: value => dispatch(appActions.setFilter(value)),
-// });
 
 export default App;

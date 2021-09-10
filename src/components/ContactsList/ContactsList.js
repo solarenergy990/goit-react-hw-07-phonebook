@@ -1,26 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ContactListItem from '../ContactsList/ContactListItem/ContactListItem';
 import s from './ContactsLIst.module.css';
 
-const ContactsList = ({ contacts, onContactDelete, children }) => {
-  // console.log(onContactDelete);
+import { useSelector, useDispatch } from 'react-redux';
+
+import operations from '../../redux/app/operations';
+import appSelectors from '../../redux/app/contacts-selectors';
+
+const ContactsList = () => {
+  const contacts = useSelector(state => appSelectors.contactList(state));
+  const filter = useSelector(state => appSelectors.contactFilter(state));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(operations.getContactOperation());
+  }, [dispatch]);
+
+  const onDeleteContact = contactId => {
+    return dispatch(operations.deleteContactOperation(contactId));
+  };
+
+  const visibleContacts = contacts.filter(contact => {
+    return contact.name.toLowerCase().includes(filter.toLowerCase());
+  });
+
   return (
     <div className={s.contacts}>
-      {children}
       <ul>
-        {contacts.map(contact => {
-          const { id, name, number } = contact;
+        {contacts.length > 0 &&
+          visibleContacts.map(contact => {
+            const { id, name, number } = contact;
 
-          return (
-            <ContactListItem
-              key={id}
-              contactName={name}
-              contactNumber={number}
-              onClickRemove={() => onContactDelete(id)}
-            />
-          );
-        })}
+            return (
+              <ContactListItem
+                key={id}
+                contactName={name}
+                contactNumber={number}
+                onClickRemove={() => onDeleteContact(id)}
+              />
+            );
+          })}
       </ul>
     </div>
   );
@@ -36,5 +56,4 @@ ContactsList.propTypes = {
       number: PropTypes.string.isRequired,
     }),
   ),
-  onContactDelete: PropTypes.func.isRequired,
 };

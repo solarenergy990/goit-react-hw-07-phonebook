@@ -1,10 +1,10 @@
-// import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers } from 'redux';
 // import { composeWithDevTools } from 'redux-devtools-extension';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import {
-  persistStore,
-  persistReducer,
+  // persistStore,
+  // persistReducer,
   FLUSH,
   REHYDRATE,
   PAUSE,
@@ -12,40 +12,42 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+// import storage from 'redux-persist/lib/storage';
 import appReducer from './app/reducer';
+import thunk from 'redux-thunk';
 
-const persistConfig = {
-  key: 'appState',
-  storage,
-  blacklist: ['filter'],
-};
+// const persistConfig = {
+//   key: 'appState',
+//   storage,
+//   blacklist: ['filter'],
+// };
 
-// const rootReducer = combineReducers({
-//   appState: appReducer,
-// });
+const rootReducer = combineReducers({
+  appState: appReducer,
+});
 
 const middleware = [
+  thunk,
   ...getDefaultMiddleware({
     serializableCheck: {
       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
     },
   }),
-  logger,
+  // logger,
 ];
 
 const store = configureStore({
-  reducer: { appState: persistReducer(persistConfig, appReducer) },
+  reducer: rootReducer,
   middleware,
 });
 
 // const store = createStore(persistedReducer, composeWithDevTools());
 
-const persistor = persistStore(store);
+// const persistor = persistStore(store);
 
-const storeItems = {
-  store,
-  persistor,
-};
+// const storeItems = {
+//   store,
+//   persistor,
+// };
 
-export default storeItems;
+export default store;

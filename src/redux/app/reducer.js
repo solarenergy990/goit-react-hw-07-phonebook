@@ -2,62 +2,80 @@
 import initialContacts from '../../contacts.json';
 import { combineReducers } from 'redux';
 import { createReducer } from '@reduxjs/toolkit';
-import actions from './actions';
+import appActions from './actions';
 
-const contacts = createReducer([...initialContacts], {
-  [actions.addContact]: (state, { payload }) => {
-    const checkedContactNames = state.map(contact => {
-      return contact.name.toLowerCase();
-    });
-    if (!checkedContactNames.includes(payload.name.toLowerCase())) {
-      return [...state, payload];
-    } else {
-      alert(`${payload.name} is already in contacts`);
-      return state;
-    }
+const initialState = {
+  items: [],
+  isLoading: false,
+  error: '',
+};
+
+// const contacts = createReducer(initialState, {
+//   [actions.addContact]: (state, { payload }) => {
+//     console.log('payload', payload);
+//     console.log('state', state);
+
+//     const checkedContactNames = state.map(contact => {
+//       return contact.name.toLowerCase();
+//     });
+//     if (!checkedContactNames.includes(payload.name.toLowerCase())) {
+//       return [...state, payload];
+//     } else {
+//       alert(`${payload.name} is already in contacts`);
+//       return state;
+//     }
+//   },
+//   [actions.deleteContact]: (state, { payload }) => {
+//     return state.filter(contact => contact.id !== payload.id);
+//   },
+// });
+
+const contacts = createReducer(initialState, {
+  [appActions.addContact]: (state, { payload }) => {
+    return {
+      ...state,
+      items: [...state.items, payload],
+    };
   },
-  [actions.deleteContact]: (state, { payload }) => {
-    return state.filter(contact => contact.id !== payload.id);
+  [appActions.deleteContact]: (state, { payload }) => {
+    // console.log('reducer payload', action);
+    // console.log('reducer state', state.items);
+    return {
+      ...state,
+      items: [...state.items.filter(contact => contact.id !== payload)],
+    };
+  },
+  [appActions.setContacts]: (state, { payload }) => {
+    console.log();
+    return {
+      ...state,
+      items: payload,
+    };
+  },
+  [appActions.contactFetchStarted]: (state, { payload }) => {
+    return {
+      ...state,
+      isLoading: payload,
+    };
+  },
+  [appActions.contactFetchFinished]: (state, { payload }) => {
+    return {
+      ...state,
+      isLoading: payload,
+    };
+  },
+  [appActions.contactFetchError]: (state, { payload }) => {
+    return {
+      ...state,
+      error: payload,
+    };
   },
 });
 
 const filter = createReducer('', {
-  [actions.setFilter]: (_, { payload }) => {
+  [appActions.setFilter]: (_, { payload }) => {
     return payload;
   },
 });
-
-// const contacts = (state = [...initialContacts], { type, payload }) => {
-//   switch (type) {
-//     case actionTypes.ADD_CONTACT: {
-//       const checkedContactNames = state.map(contact => {
-//         return contact.name.toLowerCase();
-//       });
-//       if (!checkedContactNames.includes(payload.name.toLowerCase())) {
-//         return [...state, payload];
-//       } else {
-//         alert(`${payload.name} is already in contacts`);
-//         return state;
-//       }
-//     }
-
-//     case actionTypes.DELETE_CONTACT: {
-//       return state.filter(contact => contact.id !== payload.id);
-//     }
-
-//     default:
-//       return state;
-//   }
-// };
-
-// const filter = (state = '', { type, payload }) => {
-//   switch (type) {
-//     case actionTypes.SET_FILTER: {
-//       return payload;
-//     }
-//     default:
-//       return state;
-//   }
-// };
 
 export default combineReducers({ contacts, filter });
